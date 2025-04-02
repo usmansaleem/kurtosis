@@ -1,0 +1,20 @@
+participants_matrix:
+  el:
+   - el_type: geth
+   - el_type: besu
+  cl:
+   - cl_type: lighthouse 
+
+network_params:
+  electra_fork_epoch: 1
+  min_validator_withdrawability_delay: 1
+  shard_committee_period: 1
+  churn_limit_quotient: 16
+additional_services:
+  - dora
+  - spamoor_blob
+  - spamoor
+dora_params:
+  image: "ethpandaops/dora:master-latest"
+
+global_log_level: debug
