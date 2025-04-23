@@ -1,11 +1,13 @@
 participants_matrix:
   el:
    - el_type: geth
+     el_image: ethereum/client-go:latest
    - el_type: besu
-     el_image: hyperledger/besu:25.4-develop-c64bc2a
+     el_image: hyperledger/besu:develop
   cl:
    - cl_type: teku
      cl_image: consensys/teku:develop
+     count: 1
 
 network_params:
   preset: minimal
@@ -13,23 +15,22 @@ network_params:
   min_validator_withdrawability_delay: 1
   shard_committee_period: 1
   churn_limit_quotient: 16
-  genesis_delay: 240
+  genesis_delay: 120
   
 additional_services:
   - dora
-  - spamoor_blob
   - tx_fuzz
-  - assertoor
+
 dora_params:
   image: "ethpandaops/dora:master-latest"
-spamoor_blob_params:
-  throughput: 10
-  max_blobs: 2
-  max_pending: 40
 
-assertoor_params:
-  image: "ethpandaops/assertoor:master"
-  tests:
-    - file: https://raw.githubusercontent.com/ethpandaops/assertoor/refs/heads/master/playbooks/pectra-dev/kurtosis/all.yaml
+spamoor_params:
+  image: "ethpandaops/spamoor:latest"
+  spammers:
+    - scenario: eoatx
+      name: "Standard EOA Transaction"
+      config:
+        throughput: 5   # 5 transactions per slot
+
 
 global_log_level: 'debug'

@@ -2,24 +2,31 @@ participants_matrix:
   el:
    - el_type: geth
    - el_type: besu
-     el_image: hyperledger/besu:25.4-develop-c64bc2a
+     el_image: hyperledger/besu:25.4-develop-e7563af
   cl:
    - cl_type: teku
      cl_image: consensys/teku:develop
-   - cl_type: lighthouse
+     count: 2
 
 network_params:
   electra_fork_epoch: 1
   min_validator_withdrawability_delay: 1
   shard_committee_period: 1
   churn_limit_quotient: 16
-  genesis_delay: 240
+  genesis_delay: 120
 
 additional_services:
   - dora
   - spamoor_blob
   - spamoor
+  - tx_fuzz
+
 dora_params:
   image: "ethpandaops/dora:master-latest"
+
+spamoor_blob_params:
+  throughput: 10
+  max_blobs: 2
+  max_pending: 40  
 
 global_log_level: debug
