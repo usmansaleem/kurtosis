@@ -2,6 +2,8 @@
 https://github.com/ethpandaops/ethereum-package
 
 ## Prereq
+- Kurtosis is installed. https://docs.kurtosis.com/install
+- Foundary is installed. https://getfoundry.sh/
 - Besu is built locally with `./gradlew -Prelease.releaseVersion=develop distDocker`
 - Change docker tags in `minimal-pectra.yaml` according to your requirements.
 
@@ -53,7 +55,17 @@ The transaction hash will always be different, so make sure to copy the one from
 ./run_debug_trace_tx.sh 0x65e53f014cbd3e55921fc0825c774ca63b48cc8300eba993b8662fe1b0fa16ef
 ```
 
-## Cleaning up
+## Useful kurtosis commands
 ```shell
+# Report all running services
+kurtosis enclave inspect my-testnet
+
+# Read logs of a specific service
+kurtosis service logs my-testnet el-2-besu-teku  
+
+# Stops all services and cleanup the enclave
 kurtosis clean -a
+
+# Stop the kurtosis engine
+kurtosis engine stop
 ```
