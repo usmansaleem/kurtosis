@@ -32,6 +32,21 @@ BESU_RPC_PORT=$(get_rpc_port "el-2-besu-teku")
 mkdir -p output
 
 # Build the JSON payload
+#PAYLOAD=$(jq -n --arg hash "$TX_HASH" '{
+#  jsonrpc: "2.0",
+#  method:  "debug_traceTransaction",
+#  params:  [
+#    $hash,
+#    {
+#      enableMemory: true,
+#      disableStack: false,
+#      disableStorage: false,
+#      enableReturnData: true,
+#    }
+#  ],
+#  id: 1
+#}')
+
 PAYLOAD=$(jq -n --arg hash "$TX_HASH" '{
   jsonrpc: "2.0",
   method:  "debug_traceTransaction",
@@ -44,6 +59,11 @@ PAYLOAD=$(jq -n --arg hash "$TX_HASH" '{
   ],
   id: 1
 }')
+
+echo "=== JSON-RPC Request ==="
+echo "$PAYLOAD" | jq .
+echo "========================"
+echo
 
 # Trace on Geth
 echo "Tracing on Geth (port $GETH_RPC_PORT)…"
