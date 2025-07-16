@@ -16,6 +16,7 @@ SCENARIOS=(
     "SimpleTransfer"
     "CreateContract"
     "SimpleContractCall"
+    "ContractCall"
 )
 
 # Function to extract RPC port
