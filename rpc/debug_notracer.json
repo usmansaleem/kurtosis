@@ -1,8 +1,0 @@
-{
-  "jsonrpc": "2.0",
-  "method": "debug_traceBlockByHash",
-  "params": ["0xa442d627f1f36d35009918bc0633a0bbb92902cbf0344dc8f477ac7382890a74"
-      
-    ],
-  "id": 1
-}
