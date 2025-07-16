@@ -15,6 +15,7 @@ PRIVATE_KEY="04b9f63ecf84210c5366c66d68fa1f5da1fa4f634fad6dfc86178e4d79ff9e59"
 SCENARIOS=(
     "SimpleTransfer"
     "CreateContract"
+    "SimpleContractCall"
 )
 
 # Function to extract RPC port
