@@ -4,7 +4,7 @@ participants_matrix:
      el_image: ethereum/client-go:latest
    - el_type: besu
      el_image: hyperledger/besu:develop
-     el_log_level: "info"
+     el_log_level: "warn"
   cl:
    - cl_type: teku
      cl_image: consensys/teku:develop
@@ -34,7 +34,7 @@ spamoor_params:
         throughput: 5   # 5 transactions per slot
 
 
-global_log_level: 'debug'
+global_log_level: 'info'
 
 # Global parameter to set the exit ip address of services and public ports
 port_publisher:
