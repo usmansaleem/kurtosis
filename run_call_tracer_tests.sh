@@ -12,11 +12,15 @@ echo "======================"
 PRIVATE_KEY="04b9f63ecf84210c5366c66d68fa1f5da1fa4f634fad6dfc86178e4d79ff9e59"
 
 # Test scenarios to run
+#SCENARIOS=(
+#    "SimpleTransfer"
+#    "CreateContract"
+#    "SimpleContractCall"
+#    "ContractCall"
+#    "NestedContractCall"
+#)
 SCENARIOS=(
-    "SimpleTransfer"
-    "CreateContract"
-    "SimpleContractCall"
-    "ContractCall"
+    "NestedContractCall"
 )
 
 # Function to extract RPC port
@@ -110,7 +114,7 @@ run_scenario() {
     # Run on Geth
     echo ""
     echo "--- Running on Geth ---"
-    GETH_OUTPUT=$(forge script --json "script/${scenario}.s.sol" \
+    GETH_OUTPUT=$(forge script "script/${scenario}.s.sol" \
         --rpc-url "$GETH_RPC_URL" \
         --private-key "$PRIVATE_KEY" \
         --broadcast 2>&1)
