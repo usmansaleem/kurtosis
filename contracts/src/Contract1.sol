@@ -3,11 +3,14 @@
 pragma solidity ^0.8.13;
 
 contract Contract1 {
-    function setValue(uint256 newValue) public pure returns (uint256) {
-        return newValue;
-    }
+       uint256 public value;
 
-    function revertWithReason() public pure {
-        revert("Reverted intentionally");
-    }
+       function setValue(uint256 newValue) public returns (uint256) {
+           value = newValue;
+           return newValue;
+       }
+
+       function revertWithReason() public pure {
+           revert("Reverted intentionally");
+       }
 }

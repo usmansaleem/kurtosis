@@ -20,7 +20,7 @@ PRIVATE_KEY="04b9f63ecf84210c5366c66d68fa1f5da1fa4f634fad6dfc86178e4d79ff9e59"
 #    "NestedContractCall"
 #)
 SCENARIOS=(
-    "NestedContractCall"
+    "SimpleContractCall"
 )
 
 # Function to extract RPC port
@@ -117,9 +117,16 @@ run_scenario() {
     GETH_OUTPUT=$(forge script "script/${scenario}.s.sol" \
         --rpc-url "$GETH_RPC_URL" \
         --private-key "$PRIVATE_KEY" \
+        --slow \
+        --json \
         --broadcast 2>&1)
 
-    echo "$GETH_OUTPUT"
+    # Print output prettily if it's valid JSON
+    if echo "$GETH_OUTPUT" | jq . > /dev/null 2>&1; then
+        echo "$GETH_OUTPUT" | jq .
+    else
+        echo "$GETH_OUTPUT"
+    fi
     GETH_TX_HASH=$(extract_tx_hash "$GETH_OUTPUT")
     echo "Geth TX Hash: $GETH_TX_HASH"
 

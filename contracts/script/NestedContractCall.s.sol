@@ -33,9 +33,6 @@ contract NestedContractCallScript is Script {
         uint256 result = contract3.nestedSetValue(newValue);
         console.log("Result:", result);
 
-        bytes32 txHash = vm.txHash();
-        console.log("TX:", txHash);
-
         vm.stopBroadcast();
     }
 }

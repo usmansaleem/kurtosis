@@ -11,11 +11,12 @@ contract Contract3 {
         contract2 = Contract2(_contract2Address);
     }
 
-    function nestedSetValue(uint256 newValue) public view returns (uint256) {
+    function nestedSetValue(uint256 newValue) public returns (uint256) {
         return contract2.callSetValue(newValue);
     }
 
-    function nestedRevert() public view {
+    function nestedRevert() public {
         contract2.callRevert();
     }
 }
+

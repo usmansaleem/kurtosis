@@ -11,11 +11,12 @@ contract Contract2 {
         contract1 = Contract1(_contract1Address);
     }
 
-    function callSetValue(uint256 newValue) public view returns (uint256) {
+    function callSetValue(uint256 newValue) public returns (uint256) {
         return contract1.setValue(newValue);
     }
 
-    function callRevert() public view {
+    function callRevert() public {
         contract1.revertWithReason();
     }
 }
+
