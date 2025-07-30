@@ -35,6 +35,8 @@ spamoor_params:
 
 
 global_log_level: 'info'
+# If set, the package will block until a finalized epoch has occurred.
+wait_for_finalization: false
 
 # Global parameter to set the exit ip address of services and public ports
 port_publisher:
