@@ -25,7 +25,7 @@ contract DeployNestedContracts is Script {
         0x9d86dbCcdf537F0a0BAF43160d2Ef1570d84E358, // Contract2
         0xC3536F63aB92bc7902dB5D57926c80f933121Bca, // Contract3
         0x2d93c2A44e7b33AbfAa3f0c3353C7dFE266736D5, // RevertTestContract
-        0xf1895CD094D10C80e9C72927C831a498878541CC  // RevertHelper
+        0x1c3b44601BB528C1Cf0812397a70b9330864e996  // RevertHelper
     ];
 
     // Actual deployed addresses

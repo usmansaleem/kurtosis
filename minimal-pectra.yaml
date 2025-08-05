@@ -5,6 +5,7 @@ participants_matrix:
    - el_type: besu
      el_image: hyperledger/besu:develop
      el_log_level: "warn"
+     el_extra_env_vars: {"BESU_XENABLE_EXTRA_DEBUG_TRACERS": "true"}
   cl:
    - cl_type: teku
      cl_image: consensys/teku:develop
