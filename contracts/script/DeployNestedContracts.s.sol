@@ -6,67 +6,101 @@ import {Script, console} from "forge-std/Script.sol";
 import {Contract1} from "../src/Contract1.sol";
 import {Contract2} from "../src/Contract2.sol";
 import {Contract3} from "../src/Contract3.sol";
-import {RevertContract} from "../src/RevertContract.sol";
+import {RevertTestContract} from "../src/RevertTestContract.sol";
+import {RevertHelper} from "../src/RevertHelper.sol";
 
 contract DeployNestedContracts is Script {
+    // Contract names for logging
+    string[] private contractNames = [
+        "Contract1",
+        "Contract2",
+        "Contract3",
+        "RevertTestContract",
+        "RevertHelper"
+    ];
+
     // Expected contract addresses (deterministic on fresh blockchain)
-    address constant EXPECTED_CONTRACT1 = 0xc190dD4f971bf07A778dEB48C4Dc45dd64582f44;
-    address constant EXPECTED_CONTRACT2 = 0x9d86dbCcdf537F0a0BAF43160d2Ef1570d84E358;
-    address constant EXPECTED_CONTRACT3 = 0xC3536F63aB92bc7902dB5D57926c80f933121Bca;
-    address constant EXPECTED_REVERT_CONTRACT = 0x2d93c2A44e7b33AbfAa3f0c3353C7dFE266736D5;
+    address[] private expectedAddresses = [
+        0xc190dD4f971bf07A778dEB48C4Dc45dd64582f44, // Contract1
+        0x9d86dbCcdf537F0a0BAF43160d2Ef1570d84E358, // Contract2
+        0xC3536F63aB92bc7902dB5D57926c80f933121Bca, // Contract3
+        0x2d93c2A44e7b33AbfAa3f0c3353C7dFE266736D5, // RevertTestContract
+        0xf1895CD094D10C80e9C72927C831a498878541CC  // RevertHelper
+    ];
 
-
-    Contract1 public contract1;
-    Contract2 public contract2;
-    Contract3 public contract3;
-    RevertContract public revertContract;
+    // Actual deployed addresses
+    address[] private deployedAddresses;
 
     function setUp() public {}
 
     function run() public {
-        // Check if contracts are already deployed
-        if (isContractDeployed(EXPECTED_CONTRACT1) &&
-            isContractDeployed(EXPECTED_CONTRACT2) &&
-            isContractDeployed(EXPECTED_CONTRACT3) &&
-            isContractDeployed(EXPECTED_REVERT_CONTRACT)) {
+        // Check if all contracts are already deployed
+        bool allDeployed = true;
+        for (uint i = 0; i < expectedAddresses.length; i++) {
+            if (!isContractDeployed(expectedAddresses[i])) {
+                allDeployed = false;
+                break;
+            }
+        }
+
+        if (allDeployed) {
             console.log("Contracts already deployed:");
-            console.log("  Contract1:", EXPECTED_CONTRACT1);
-            console.log("  Contract2:", EXPECTED_CONTRACT2);
-            console.log("  Contract3:", EXPECTED_CONTRACT3);
-            console.log("  RevertContract:", EXPECTED_REVERT_CONTRACT);
+            for (uint i = 0; i < contractNames.length; i++) {
+                console.log("  %s: %s", contractNames[i], expectedAddresses[i]);
+            }
             return;
         }
+
+        // Initialize the array
+        deployedAddresses = new address[](expectedAddresses.length);
 
         vm.startBroadcast();
 
         // Deploy Contract1
-        contract1 = new Contract1();
-        console.log("Contract1 deployed at:", address(contract1));
+        Contract1 contract1 = new Contract1();
+        deployedAddresses[0] = address(contract1);
+        console.log("%s deployed at: %s", contractNames[0], deployedAddresses[0]);
 
         // Deploy Contract2, passing Contract1's address
-        contract2 = new Contract2(address(contract1));
-        console.log("Contract2 deployed at:", address(contract2));
+        Contract2 contract2 = new Contract2(deployedAddresses[0]);
+        deployedAddresses[1] = address(contract2);
+        console.log("%s deployed at: %s", contractNames[1], deployedAddresses[1]);
 
         // Deploy Contract3, passing Contract2's address
-        contract3 = new Contract3(address(contract2));
-        console.log("Contract3 deployed at:", address(contract3));
+        Contract3 contract3 = new Contract3(deployedAddresses[1]);
+        deployedAddresses[2] = address(contract3);
+        console.log("%s deployed at: %s", contractNames[2], deployedAddresses[2]);
 
-        // Deploy RevertContract
-        revertContract = new RevertContract();
-        console.log("RevertContract deployed at:", address(revertContract));
+        // Deploy RevertTestContract
+        RevertTestContract revertContract = new RevertTestContract();
+        deployedAddresses[3] = address(revertContract);
+        console.log("%s deployed at: %s", contractNames[3], deployedAddresses[3]);
+
+        // Deploy RevertHelper
+        RevertHelper revertHelper = new RevertHelper();
+        deployedAddresses[4] = address(revertHelper);
+        console.log("%s deployed at: %s", contractNames[4], deployedAddresses[4]);
 
         vm.stopBroadcast();
 
-        // Verify addresses match expected (on fresh blockchain)
-        if (address(contract1) != EXPECTED_CONTRACT1 ||
-            address(contract2) != EXPECTED_CONTRACT2 ||
-            address(contract3) != EXPECTED_CONTRACT3 ||
-            address(revertContract) != EXPECTED_REVERT_CONTRACT) {
-            console.log("WARNING: Contract addresses don't match expected values!");
-            console.log("Expected Contract1:", EXPECTED_CONTRACT1, "Got:", address(contract1));
-            console.log("Expected Contract2:", EXPECTED_CONTRACT2, "Got:", address(contract2));
-            console.log("Expected Contract3:", EXPECTED_CONTRACT3, "Got:", address(contract3));
-            console.log("Expected RevertContract:", EXPECTED_REVERT_CONTRACT, "Got:", address(revertContract));
+        // Verify addresses match expected
+        bool allMatch = true;
+        for (uint i = 0; i < expectedAddresses.length; i++) {
+            if (deployedAddresses[i] != expectedAddresses[i]) {
+                allMatch = false;
+                console.log(
+                    "WARNING: %s address mismatch! Expected: %s, Got: %s",
+                    contractNames[i],
+                    expectedAddresses[i],
+                    deployedAddresses[i]
+                );
+            }
+        }
+
+        if (allMatch) {
+            console.log("All contract addresses match expected values!");
+        } else {
+            console.log("Some contract addresses don't match expected values!");
         }
     }
 
