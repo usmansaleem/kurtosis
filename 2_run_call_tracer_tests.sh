@@ -20,8 +20,7 @@ PRIVATE_KEY="04b9f63ecf84210c5366c66d68fa1f5da1fa4f634fad6dfc86178e4d79ff9e59"
 #    "NestedContractCall"
 #)
 SCENARIOS=(
-        "SimpleTransfer"
-        "CreateContract"
+        "HelperRevert"
 )
 
 # Function to extract RPC port
@@ -43,6 +42,8 @@ echo "Geth RPC: $GETH_RPC_URL"
 
 # Create output directories
 mkdir -p output/scenarios
+# delete existing .json in scenarios
+rm output/scenarios/*.json
 
 # Function to extract transaction hash from forge JSON output
 extract_tx_hash() {
