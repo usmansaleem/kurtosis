@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <Appenders>
+        <!-- File just for the call tracer -->
+        <RollingFile name="CallTracerFile"
+                     fileName="/tmp/calltracer.log"
+                     filePattern="/tmp/calltracer-%d{yyyy-MM-dd}-%i.log.gz">
+            <PatternLayout pattern="[%d{ISO8601}] %-5p %c - %m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="20 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+
+        <!-- Optional console (root); Besu may also configure its own console -->
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level %c{1} - %msg%n"/>
+        </Console>
+    </Appenders>
+
+    <Loggers>
+        <!-- Route ONLY this class to the file, at TRACE. No propagation to root. -->
+        <Logger name="org.hyperledger.besu.ethereum.api.jsonrpc.internal.results.CallTracerResultConverter"
+                level="TRACE" additivity="false">
+            <AppenderRef ref="CallTracerFile"/>
+        </Logger>
+
+        <!-- Root stays whatever; console will be noisy if Besu sets -->
+        <Root level="INFO">
+            <AppenderRef ref="Console"/>
+        </Root>
+    </Loggers>
+</Configuration>

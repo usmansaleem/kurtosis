@@ -3,9 +3,11 @@ participants_matrix:
    - el_type: geth
      el_image: ethereum/client-go:latest
    - el_type: besu
-     el_image: hyperledger/besu:25.8-develop-c302bb9
-     el_log_level: "info"
-     el_extra_env_vars: {"BESU_XENABLE_EXTRA_DEBUG_TRACERS": "true"}
+     el_image: hyperledger/besu:25.8-develop-e701b9a
+     el_extra_env_vars:
+       BESU_XENABLE_EXTRA_DEBUG_TRACERS: "true"
+       LOG4J_CONFIGURATION_FILE: "/config/log4j2.xml"
+     el_extra_mounts: {"/config": "besu_log4j"}
   cl:
    - cl_type: teku
      cl_image: consensys/teku:develop
@@ -35,7 +37,7 @@ spamoor_params:
         throughput: 5   # 5 transactions per slot
 
 
-global_log_level: 'info'
+#global_log_level: 'info'
 # If set, the package will block until a finalized epoch has occurred.
 wait_for_finalization: false
 
