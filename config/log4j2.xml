@@ -28,17 +28,7 @@
                 level="${calltracer.level}"
                 additivity="false">
             <AppenderRef ref="CallTracerFile"/>
-            <!-- Optional: also echo to console while debugging -->
-            <AppenderRef ref="Console"/>
         </Logger>
-
-        <!-- (Safety net) If the class name ever differs, enable TRACE for the whole package. Comment out if too chatty. -->
-        <!--
-        <Logger name="org.hyperledger.besu.ethereum.api.jsonrpc.internal.results"
-                level="trace" additivity="false">
-          <AppenderRef ref="CallTracerFile"/>
-        </Logger>
-        -->
 
         <!-- Everything else at INFO to console -->
         <Root level="${root.level}">
