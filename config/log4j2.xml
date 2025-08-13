@@ -1,33 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="WARN">
-    <Appenders>
-        <!-- File just for the call tracer -->
-        <RollingFile name="CallTracerFile"
-                     fileName="/tmp/calltracer.log"
-                     filePattern="/tmp/calltracer-%d{yyyy-MM-dd}-%i.log.gz">
-            <PatternLayout pattern="[%d{ISO8601}] %-5p %c - %m%n"/>
-            <Policies>
-                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
-                <SizeBasedTriggeringPolicy size="20 MB"/>
-            </Policies>
-            <DefaultRolloverStrategy max="10"/>
-        </RollingFile>
+    <Properties>
+        <!-- Root console level remains INFO so you don't flood stdout -->
+        <Property name="root.level">info</Property>
+        <Property name="calltracer.level">TRACE</Property>
+        <Property name="calltracer.file">/tmp/call_tracer_converter.log</Property>
+        <Property name="pattern">%d{yyyy-MM-dd HH:mm:ss.SSSZZZ} | %t | %-5level | %c{1} | %msg%n</Property>
+    </Properties>
 
-        <!-- Optional console (root); Besu may also configure its own console -->
+    <Appenders>
         <Console name="Console" target="SYSTEM_OUT">
-            <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level %c{1} - %msg%n"/>
+            <PatternLayout pattern="${pattern}"/>
         </Console>
+
+        <!-- File for call tracer only -->
+        <File name="CallTracerFile"
+              fileName="${calltracer.file}"
+              append="true"
+              immediateFlush="true">
+            <PatternLayout pattern="${pattern}"/>
+        </File>
     </Appenders>
 
     <Loggers>
-        <!-- Route ONLY this class to the file, at TRACE. No propagation to root. -->
+        <!-- Narrow logger JUST for your class at TRACE -->
         <Logger name="org.hyperledger.besu.ethereum.api.jsonrpc.internal.results.CallTracerResultConverter"
-                level="TRACE" additivity="false">
+                level="${calltracer.level}"
+                additivity="false">
             <AppenderRef ref="CallTracerFile"/>
+            <!-- Optional: also echo to console while debugging -->
+            <AppenderRef ref="Console"/>
         </Logger>
 
-        <!-- Root stays whatever; console will be noisy if Besu sets -->
-        <Root level="WARN">
+        <!-- (Safety net) If the class name ever differs, enable TRACE for the whole package. Comment out if too chatty. -->
+        <!--
+        <Logger name="org.hyperledger.besu.ethereum.api.jsonrpc.internal.results"
+                level="trace" additivity="false">
+          <AppenderRef ref="CallTracerFile"/>
+        </Logger>
+        -->
+
+        <!-- Everything else at INFO to console -->
+        <Root level="${root.level}">
             <AppenderRef ref="Console"/>
         </Root>
     </Loggers>
