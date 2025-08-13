@@ -27,7 +27,7 @@
         </Logger>
 
         <!-- Root stays whatever; console will be noisy if Besu sets -->
-        <Root level="INFO">
+        <Root level="WARN">
             <AppenderRef ref="Console"/>
         </Root>
     </Loggers>

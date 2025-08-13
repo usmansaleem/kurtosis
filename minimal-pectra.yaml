@@ -3,7 +3,7 @@ participants_matrix:
    - el_type: geth
      el_image: ethereum/client-go:latest
    - el_type: besu
-     el_image: hyperledger/besu:25.8-develop-e701b9a
+     el_image: hyperledger/besu:latest
      el_extra_env_vars:
        BESU_XENABLE_EXTRA_DEBUG_TRACERS: "true"
        LOG4J_CONFIGURATION_FILE: "/config/log4j2.xml"
