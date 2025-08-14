@@ -5,8 +5,6 @@ set -euo pipefail
 # Config
 # ------------------------
 ENCLAVE="${ENCLAVE:-my-testnet}"
-ARTIFACT_NAME="${ARTIFACT_NAME:-besu_log4j}"
-LOCAL_LOG4J="${LOCAL_LOG4J:-./config/log4j2.xml}"
 PKG="${PKG:-github.com/ethpandaops/ethereum-package}"
 ARGS_SRC="${ARGS_SRC:-./minimal-pectra.yaml}"   # keep 'hyperledger/besu:latest' in here
 
@@ -173,55 +171,6 @@ wait_for_el_ready() {
   return 1
 }
 
-# --- helper: idempotent files-artifact upload (with retry) ---
-UPLOAD_ATTEMPTS="${UPLOAD_ATTEMPTS:-8}"          # total tries
-UPLOAD_BACKOFF_INIT="${UPLOAD_BACKOFF_INIT:-1}"  # seconds
-UPLOAD_BACKOFF_MAX="${UPLOAD_BACKOFF_MAX:-10}"   # seconds
-
-artifact_exists() {
-  kurtosis files inspect "${ENCLAVE}" "${ARTIFACT_NAME}" >/dev/null 2>&1
-}
-
-upload_log4j_with_retry() {
-  local tries="${UPLOAD_ATTEMPTS}"
-  local backoff="${UPLOAD_BACKOFF_INIT}"
-  local i exitcode
-
-  if [[ ! -f "${LOCAL_LOG4J}" ]]; then
-    echo "ERROR: LOCAL_LOG4J not found: ${LOCAL_LOG4J}" >&2
-    return 2
-  fi
-
-  for (( i=1; i<=tries; i++ )); do
-    if kurtosis files upload --name "${ARTIFACT_NAME}" "${ENCLAVE}" "${LOCAL_LOG4J}"; then
-      echo "Uploaded files artifact '${ARTIFACT_NAME}' successfully."
-      return 0
-    fi
-    exitcode=$?
-    echo "Upload attempt ${i}/${tries} failed (exit ${exitcode}). Retrying in ${backoff}s…" >&2
-    sleep "${backoff}"
-    backoff=$(( backoff * 2 ))
-    (( backoff > UPLOAD_BACKOFF_MAX )) && backoff="${UPLOAD_BACKOFF_MAX}"
-  done
-
-  echo "ERROR: Could not upload '${LOCAL_LOG4J}' to enclave '${ENCLAVE}' after ${tries} attempts." >&2
-  return 1
-}
-
-ensure_log4j_artifact() {
-  if [[ "${FORCE_REUPLOAD:-0}" == "1" ]]; then
-    echo "FORCE_REUPLOAD=1 set; uploading '${ARTIFACT_NAME}' to '${ENCLAVE}'…"
-    upload_log4j_with_retry
-    return
-  fi
-  if artifact_exists; then
-    echo "Files artifact '${ARTIFACT_NAME}' already present in enclave '${ENCLAVE}'; skipping upload."
-    return 0
-  fi
-  echo "Uploading files artifact '${ARTIFACT_NAME}' from ${LOCAL_LOG4J} (with retry)…"
-  sleep 1
-  upload_log4j_with_retry
-}
 # Ensure enclave exists
 if enclave_exists; then
   echo "Enclave '${ENCLAVE}' already exists."
@@ -229,9 +178,6 @@ else
   echo "Enclave '${ENCLAVE}' not found; creating..."
   kurtosis enclave add --name "${ENCLAVE}"
 fi
-
-# Ensure the log4j2 files artifact is present (idempotent across runs)
-ensure_log4j_artifact
 
 # Run the package
 echo "Launching package ${PKG} in enclave ${ENCLAVE} with args: ${ARGS_FILE}"

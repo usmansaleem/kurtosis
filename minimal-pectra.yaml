@@ -8,7 +8,7 @@ participants_matrix:
      el_extra_env_vars:
        BESU_XENABLE_EXTRA_DEBUG_TRACERS: "true"
        LOG4J_CONFIGURATION_FILE: "/config/log4j2.xml"
-     el_extra_mounts: {"/config": "besu_log4j"}
+     el_extra_mounts: {"/config": "log4j.xml"}
   cl:
    - cl_type: teku
      cl_image: consensys/teku:develop
@@ -79,3 +79,45 @@ port_publisher:
   additional_services:
     enabled: true
     public_port_start: 36000
+
+# Besu log4j files
+extra_files:
+  log4j.xml: |
+    <?xml version="1.0" encoding="UTF-8"?>
+    <Configuration status="WARN">
+        <Properties>
+            <!-- Root console level remains INFO so you don't flood stdout -->
+            <Property name="root.level">info</Property>
+            <Property name="calltracer.level">TRACE</Property>
+            <Property name="calltracer.file">/tmp/call_tracer_converter.log</Property>
+            <Property name="pattern">%d{yyyy-MM-dd HH:mm:ss.SSSZZZ} | %t | %-5level | %c{1} | %msg%n</Property>
+        </Properties>
+
+        <Appenders>
+            <Console name="Console" target="SYSTEM_OUT">
+                <PatternLayout pattern="${pattern}"/>
+            </Console>
+
+            <!-- File for call tracer only -->
+            <File name="CallTracerFile"
+                  fileName="${calltracer.file}"
+                  append="true"
+                  immediateFlush="true">
+                <PatternLayout pattern="${pattern}"/>
+            </File>
+        </Appenders>
+
+        <Loggers>
+            <!-- Narrow logger JUST for your class at TRACE -->
+            <Logger name="org.hyperledger.besu.ethereum.api.jsonrpc.internal.results.CallTracerResultConverter"
+                    level="${calltracer.level}"
+                    additivity="false">
+                <AppenderRef ref="CallTracerFile"/>
+            </Logger>
+
+            <!-- Everything else at INFO to console -->
+            <Root level="${root.level}">
+                <AppenderRef ref="Console"/>
+            </Root>
+        </Loggers>
+    </Configuration>
