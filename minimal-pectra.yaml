@@ -8,7 +8,7 @@ participants_matrix:
      el_extra_env_vars:
        BESU_XENABLE_EXTRA_DEBUG_TRACERS: "true"
        LOG4J_CONFIGURATION_FILE: "/config/log4j2.xml"
-     el_extra_mounts: {"/config": "log4j.xml"}
+     el_extra_mounts: {"/config": "log4j2.xml"}
   cl:
    - cl_type: teku
      cl_image: consensys/teku:develop
@@ -82,7 +82,7 @@ port_publisher:
 
 # Besu log4j files
 extra_files:
-  log4j.xml: |
+  log4j2.xml: |
     <?xml version="1.0" encoding="UTF-8"?>
     <Configuration status="WARN">
         <Properties>
