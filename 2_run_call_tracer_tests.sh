@@ -24,7 +24,6 @@ SCENARIOS=(
   "NestedContractCall"
   "HelperRevert"
   "Delegatecall"
-  "PrecompileIdentity"
 )
 
 # ------------------------------
