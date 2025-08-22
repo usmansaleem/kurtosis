@@ -6,10 +6,13 @@ import {Script, console} from "forge-std/Script.sol";
 import {PrecompileCaller} from "../src/PrecompileCaller.sol";
 
 contract PrecompileIdentityScript is Script {
+    address constant PRECOMPILE_CALLER_ADDR = 0x224115411A570EE0C66d852084EB92f728f954ed;
+
     function run() external {
         vm.startBroadcast();
 
-        PrecompileCaller c = new PrecompileCaller();
+        // load already deployed contract
+        PrecompileCaller c = PrecompileCaller(PRECOMPILE_CALLER_ADDR);
 
         // Non word-aligned payload to exercise padding (length = 11 bytes)
         bytes memory payload = hex"9fb37853deadbeef01aa55";

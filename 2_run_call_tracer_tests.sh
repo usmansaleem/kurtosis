@@ -24,6 +24,15 @@ SCENARIOS=(
   "NestedContractCall"
   "HelperRevert"
   "Delegatecall"
+  "PrecompileBlake2F"
+  "PrecompileBn128Add"
+  "PrecompileBn128Mul"
+  "PrecompileBn128Pairing"
+  "PrecompileECRecover"
+  "PrecompileIdentity"
+  "PrecompileModExp"
+  "PrecompileRIPEMD160"
+  "PrecompileSHA256"
 )
 
 # ------------------------------

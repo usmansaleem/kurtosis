@@ -5,10 +5,12 @@ import {Script, console} from "forge-std/Script.sol";
 import {PrecompileCaller} from "../src/PrecompileCaller.sol";
 
 contract PrecompileBn128AddScript is Script {
+    address constant PRECOMPILE_CALLER_ADDR = 0x224115411A570EE0C66d852084EB92f728f954ed;
+
     function run() external {
         vm.startBroadcast();
 
-        PrecompileCaller c = new PrecompileCaller();
+        PrecompileCaller c = PrecompileCaller(PRECOMPILE_CALLER_ADDR);
 
         // Use the small on-curve point (1,2) twice.
         bytes32 x = bytes32(uint256(1));

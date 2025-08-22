@@ -5,10 +5,12 @@ import {Script, console} from "forge-std/Script.sol";
 import {PrecompileCaller} from "../src/PrecompileCaller.sol";
 
 contract PrecompileBlake2FScript is Script {
+    address constant PRECOMPILE_CALLER_ADDR = 0x224115411A570EE0C66d852084EB92f728f954ed;
+
     function run() external {
         vm.startBroadcast();
 
-        PrecompileCaller c = new PrecompileCaller();
+        PrecompileCaller c = PrecompileCaller(PRECOMPILE_CALLER_ADDR);
 
         // Build 213-byte payload: rounds(4) + h(64) + m(128) + t(16) + final(1)
         // rounds is uint32 big-endian; final is 0x01 for last block.

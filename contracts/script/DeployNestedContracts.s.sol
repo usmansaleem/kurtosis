@@ -8,6 +8,7 @@ import {Contract2} from "../src/Contract2.sol";
 import {Contract3} from "../src/Contract3.sol";
 import {RevertTestContract} from "../src/RevertTestContract.sol";
 import {RevertHelper} from "../src/RevertHelper.sol";
+import {PrecompileCaller} from "../src/PrecompileCaller.sol";
 
 contract DeployNestedContracts is Script {
     // Contract names for logging
@@ -16,7 +17,8 @@ contract DeployNestedContracts is Script {
         "Contract2",
         "Contract3",
         "RevertTestContract",
-        "RevertHelper"
+        "RevertHelper",
+        "PrecompileCaller"
     ];
 
     // Expected contract addresses (deterministic on fresh blockchain)
@@ -25,7 +27,8 @@ contract DeployNestedContracts is Script {
         0x9d86dbCcdf537F0a0BAF43160d2Ef1570d84E358, // Contract2
         0xC3536F63aB92bc7902dB5D57926c80f933121Bca, // Contract3
         0x2d93c2A44e7b33AbfAa3f0c3353C7dFE266736D5, // RevertTestContract
-        0x1c3b44601BB528C1Cf0812397a70b9330864e996  // RevertHelper
+        0x1c3b44601BB528C1Cf0812397a70b9330864e996, // RevertHelper
+        0x224115411A570EE0C66d852084EB92f728f954ed  // PrecompileCaller
     ];
 
     // Actual deployed addresses
@@ -80,6 +83,11 @@ contract DeployNestedContracts is Script {
         RevertHelper revertHelper = new RevertHelper();
         deployedAddresses[4] = address(revertHelper);
         console.log("%s deployed at: %s", contractNames[4], deployedAddresses[4]);
+
+        // Deploy PrecompileCaller
+        PrecompileCaller precompileCaller = new PrecompileCaller();
+        deployedAddresses[5] = address(precompileCaller);
+        console.log("%s deployed at: %s", contractNames[5], deployedAddresses[5]);
 
         vm.stopBroadcast();
 

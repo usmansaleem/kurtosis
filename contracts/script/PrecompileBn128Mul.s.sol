@@ -5,10 +5,12 @@ import {Script, console} from "forge-std/Script.sol";
 import {PrecompileCaller} from "../src/PrecompileCaller.sol";
 
 contract PrecompileBn128MulScript is Script {
+    address constant PRECOMPILE_CALLER_ADDR = 0x224115411A570EE0C66d852084EB92f728f954ed;
+
     function run() external {
         vm.startBroadcast();
 
-        PrecompileCaller c = new PrecompileCaller();
+        PrecompileCaller c = PrecompileCaller(PRECOMPILE_CALLER_ADDR);
 
         // Multiply (1,2) by 2.
         bytes32 x = bytes32(uint256(1));

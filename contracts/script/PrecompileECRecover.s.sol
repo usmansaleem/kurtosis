@@ -5,10 +5,12 @@ import {Script, console} from "forge-std/Script.sol";
 import {PrecompileCaller} from "../src/PrecompileCaller.sol";
 
 contract PrecompileECRecoverScript is Script {
+    address constant PRECOMPILE_CALLER_ADDR = 0x224115411A570EE0C66d852084EB92f728f954ed;
+
     function run() external {
         vm.startBroadcast();
 
-        PrecompileCaller c = new PrecompileCaller();
+        PrecompileCaller c = PrecompileCaller(PRECOMPILE_CALLER_ADDR);
 
         // Make a real signature so the precompile returns a nonzero address.
         uint256 pk = 0xA11CE; // any dev key
