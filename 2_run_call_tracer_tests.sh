@@ -156,11 +156,11 @@ run_scenario() {
       --broadcast 2>&1)
 
   # Pretty print if JSON, otherwise print raw
-  if echo "$GETH_OUTPUT" | jq . >/dev/null 2>&1; then
-    echo "$GETH_OUTPUT" | jq .
-  else
-    echo "$GETH_OUTPUT"
-  fi
+#  if echo "$GETH_OUTPUT" | jq . >/dev/null 2>&1; then
+#    echo "$GETH_OUTPUT" | jq .
+#  else
+#    echo "$GETH_OUTPUT"
+#  fi
 
   GETH_TX_HASH=$(extract_tx_hash "$GETH_OUTPUT") || {
     echo "Failed to extract tx hash for $scenario"; popd >/dev/null; return 1; }
