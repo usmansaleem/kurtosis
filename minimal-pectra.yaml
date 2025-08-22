@@ -114,6 +114,13 @@ extra_files:
                     additivity="false">
                 <AppenderRef ref="CallTracerFile"/>
             </Logger>
+    
+            <!-- Add logger for DebugOperationTracer at TRACE/DEBUG -->
+            <Logger name="org.hyperledger.besu.ethereum.vm.DebugOperationTracer"
+                    level="TRACE"
+                    additivity="false">
+                <AppenderRef ref="CallTracerFile"/>
+            </Logger>
 
             <!-- Everything else at INFO to console -->
             <Root level="${root.level}">
