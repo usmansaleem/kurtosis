@@ -110,6 +110,7 @@ get_call_tracer() {
 
   local payload
   payload=$(jq -cn --arg tx "$tx_hash" '{jsonrpc:"2.0",id:1,method:"debug_traceTransaction",params:[$tx, {tracer:"callTracer"}]}')
+  #payload=$(jq -cn --arg tx "$tx_hash" '{jsonrpc:"2.0",id:1,method:"debug_traceTransaction",params:[$tx]}')
 
   echo "=== JSON-RPC Request ==="
   echo "$payload" | jq .
@@ -156,11 +157,11 @@ run_scenario() {
       --broadcast 2>&1)
 
   # Pretty print if JSON, otherwise print raw
-#  if echo "$GETH_OUTPUT" | jq . >/dev/null 2>&1; then
-#    echo "$GETH_OUTPUT" | jq .
-#  else
-#    echo "$GETH_OUTPUT"
-#  fi
+  if echo "$GETH_OUTPUT" | jq . >/dev/null 2>&1; then
+    echo "$GETH_OUTPUT" | jq .
+  else
+    echo "$GETH_OUTPUT"
+  fi
 
   GETH_TX_HASH=$(extract_tx_hash "$GETH_OUTPUT") || {
     echo "Failed to extract tx hash for $scenario"; popd >/dev/null; return 1; }
@@ -175,8 +176,8 @@ run_scenario() {
 
   echo ""
   echo "--- Getting Call Tracer Results ---"
-  get_call_tracer "$GETH_TX_HASH" "$BESU_RPC_URL" "output/scenarios/${scenario}_besu.json" || return 1
   get_call_tracer "$GETH_TX_HASH" "$GETH_RPC_URL" "output/scenarios/${scenario}_geth.json" || return 1
+  get_call_tracer "$GETH_TX_HASH" "$BESU_RPC_URL" "output/scenarios/${scenario}_besu.json" || return 1
 
   echo "--- Quick Comparison ---"
   BESU_GAS=$(jq -r '.result.gasUsed // "null"' "output/scenarios/${scenario}_besu.json")
