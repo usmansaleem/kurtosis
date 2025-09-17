@@ -33,6 +33,7 @@ SCENARIOS=(
   "PrecompileModExp"
   "PrecompileRIPEMD160"
   "PrecompileSHA256"
+  "InsufficientBalance"
 )
 
 # ------------------------------
@@ -148,9 +149,9 @@ run_scenario() {
   pushd contracts >/dev/null
 
   echo ""
-  echo "--- Running on Geth ---"
+  echo "--- Running on Besu ---"
   GETH_OUTPUT=$(forge script "script/${scenario}.s.sol" \
-      --rpc-url "$GETH_RPC_URL" \
+      --rpc-url "$BESU_RPC_URL" \
       --private-key "$PRIVATE_KEY" \
       --slow \
       --json \
