@@ -1,0 +1,40 @@
+# Auto-detect text files and normalize to LF in repository
+* text=auto
+
+# Shell scripts should always use LF (Unix-style)
+*.sh text eol=lf
+
+# Windows batch files must use CRLF
+*.bat text eol=crlf
+
+# Python files should use LF
+*.py text eol=lf
+
+# Markdown and documentation
+*.md text eol=lf
+*.txt text eol=lf
+
+# YAML configuration files
+*.yaml text eol=lf
+*.yml text eol=lf
+
+# JSON files
+*.json text eol=lf
+
+# Solidity files
+*.sol text eol=lf
+
+# Git configuration
+.gitignore text eol=lf
+.gitattributes text eol=lf
+.gitmodules text eol=lf
+
+# Binary files (explicitly mark to avoid any text processing)
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.zip binary
+*.tar binary
+*.gz binary

@@ -1,2 +1,27 @@
+# IDE files
 .idea
+.vscode/
+
+# Python virtual environment
+venv/
+env/
+ENV/
+.venv/
+
+# Python cache and compiled files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Test outputs
 output/*
+
+# Kurtosis temporary files
+.minimal-pectra.yaml.tag_*
+*.tag_*
+
+# OS files
+.DS_Store
+Thumbs.db
